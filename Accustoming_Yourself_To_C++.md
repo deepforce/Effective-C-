@@ -137,3 +137,30 @@ Fortunately, you don't need to put up with this nonsense. You can get all the ef
 
 This template generates a whole family of functions, each of which takes two objects of the same type and calls `f` with the greater of the two objects. There's no need to parenthesize parameters inside the function body, no need to worry about evaluating parameters multiple times, etc. Furthermore, because `callWithMax` is a real function, it obeys scope and access rules. For example, it makes perfect sense to talk about an inline function that is private to a class. In general, there's no way to do that with a macro. 
 
+
+
+### Item 3: Use `const` whenever possible
+
+The wonderful thing about `const` is that it allows you to specify a semantic constraint — a particular object should not be modified — and compilers will enforce that constraint.
+
+The `const` keyword is remarkably versatile. Outside of classes, you can use it for constants at global or namespace scope, as well as for objects declared `static` at file, function, or block scope. Inside classes, you can use it for both static and non-static data members. For pointers, you can specify whether the pointer itself is `const`, the data it points to is `const`, both, or neither:
+
+```c++
+	char greeting[] = "Hello";
+	char *p = greeting;					// non-const pointer, non-const data
+	const char *p = greeting		// non-const pointer, const data
+  char * const p = greeting	 	// const pointer, non-const data
+  const char * const p = greeting // const pointer, const data
+```
+
+**If the word `const` appears to the left of the asterisk, what's *pointed* to is constant;** **if the wrod `const` appears to the right of the asterisk, the *pointer* itself is constant;** **if `const` appears on both sides, both are constant.**
+
+When what's pointed to is constant, some programmers ist `const` before the type. Others list it after the type but before the asterisk. **There is no difference in meaning**, so the following functions take the same parameter type:
+
+```c++
+	void f1(const Widget *pw);				// f1 takes a pointer to a constant Widget object
+	void f2(Widget const *pw);				// so does f2
+```
+
+
+
