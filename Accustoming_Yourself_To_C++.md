@@ -164,3 +164,19 @@ When what's pointed to is constant, some programmers ist `const` before the type
 
 
 
+STL iterators are modeled on pointers, so an `iterator` acts much like a T* pointer. Declaring an iterator `const` is like declaring a pointer `const` : the `iterator` isn't allowed to point to something different, but the thing it points to may be modified. If you want an iterator that points to something that can't be modified, you want a `const_iterator`:
+
+``` c++
+	std::vector<int> vec;
+	...
+  const std::vector<int>::iterator iter = vec.begin() // iter acts like a T* const
+  *iter = 10;		// OK, changes what iter points to
+	++iter;				// error! iter is const
+
+	std::vector<int>::const_iterator clter = vec.begin() // clter acts like a const T*
+  *clter = 10;	// error! *clter is const
+	++clter;			// fine, changes clter
+```
+
+
+
