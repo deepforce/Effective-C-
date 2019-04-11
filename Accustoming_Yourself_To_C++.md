@@ -180,3 +180,25 @@ STL iterators are modeled on pointers, so an `iterator` acts much like a T* poin
 
 
 
+Some of the most powerful uses of `const` stem from its application to function declarations. **Within a function declaration, `const` can refer to the function's return value, to individual parameters, and, for member functions, to the function as a whole.**
+
+Having a fnction return a constant value is generally inappropriate, but sometimes doing so can reduce the incidence of client errors without giving up safety or efficiency. For example, consider the declaration of the `opearator*` function for rational numbers:
+
+```c++
+	class Rational {
+    const Rational operator*(const Rational& lhs, const Rational& rhs);
+	}
+```
+
+If the result of `operator*` be a `const` object, clients would be able to commit atrocities like this:
+
+```c++
+	Rational a, b, c;
+	...
+  (a * b) = c;
+```
+
+Such code would be flat-out illegal if `a` and `b` were of a built-in type.
+
+
+
