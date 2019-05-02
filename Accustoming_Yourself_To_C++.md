@@ -182,7 +182,7 @@ STL iterators are modeled on pointers, so an `iterator` acts much like a T* poin
 
 Some of the most powerful uses of `const` stem from its application to function declarations. **Within a function declaration, `const` can refer to the function's return value, to individual parameters, and, for member functions, to the function as a whole.**
 
-Having a fnction return a constant value is generally inappropriate, but sometimes doing so can reduce the incidence of client errors without giving up safety or efficiency. For example, consider the declaration of the `opearator*` function for rational numbers:
+Having a function return a constant value is generally inappropriate, but sometimes doing so can reduce the incidence of client errors without giving up safety or efficiency. For example, consider the declaration of the `opearator*` function for rational numbers:
 
 ```c++
 	class Rational {
@@ -190,7 +190,7 @@ Having a fnction return a constant value is generally inappropriate, but sometim
 	}
 ```
 
-If the result of `operator*` be a `const` object, clients would be able to commit atrocities like this:
+If the result of `operator*` weren't a `const` object, clients would be able to commit atrocities like this:
 
 ```c++
 	Rational a, b, c;
@@ -198,7 +198,14 @@ If the result of `operator*` be a `const` object, clients would be able to commi
   (a * b) = c;
 ```
 
-Such code would be flat-out illegal if `a` and `b` were of a built-in type.
+Such code would be flat-out illegal if `a` and `b` were of a built-in type. One of the hallmarks of good user-defined types is that they avoid gratuitous incompatibilities with the built-ins. Declaring `operator*`'s return value `const` prevents it.
 
+#### const Member Functions
 
+The purpose of `const` on member functions is to identify which member functions may be invoked on `const` objects. Such member functions are important for two reasons.
+
+1. they make the interface of a class easier to understand. It's imporatant to know which functions may modify an object and which may not.
+2. they make it possible to work with `const` objects. That's a critical aspect of writing efficient code , because one of the fundamental ways to improve a C++ program's performance is to pass objects by reference-to-const. That technique is viable only if there are `const` member functions with which to manipulate the resulting `const`-qualified objects.
+
+Many people overlook the fact that member functions differing only in their constness can be overloaded, but this is an important feature of C++.
 
